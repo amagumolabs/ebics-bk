@@ -1,0 +1,12 @@
+{
+	"url": "https://isotest.postfinance.ch/ebicsweb/ebicsweb",
+	"partnerId": "PFC00532",
+	"userId": "PFC00532",
+	"hostId": "PFEBICS",
+	"passphrase": "MyPasswordTest",
+	"keyStoragePath": "./src/keys/keys-test",
+	"bankName":"AmagumorBanks",
+	"bankShortName":"Amagumor", 
+	"languageCode":"en",
+	"storageLocation":"./src/keys/bank-keys-test"
+}

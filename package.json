@@ -1,0 +1,25 @@
+{
+  "name": "sb_ebics_nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@chilkat/ck-node18-win64": "^9.50.95",
+    "dotenv": "^16.3.1",
+    "ebics-api": "^0.0.1",
+    "ebics-client": "^0.3.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.8",
+    "eslint": "^8.49.0",
+    "libxmljs": "^1.0.9",
+    "nodemon": "^3.0.1"
+  }
+}
