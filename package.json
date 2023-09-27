@@ -14,7 +14,9 @@
     "@chilkat/ck-node18-win64": "^9.50.95",
     "dotenv": "^16.3.1",
     "ebics-api": "^0.0.1",
-    "ebics-client": "^0.3.0"
+    "ebics-client": "^0.3.0",
+    "sepa": "^1.0.4",
+    "sepa-xml": "^0.6.0"
   },
   "devDependencies": {
     "chai": "^4.3.8",

@@ -1,9 +1,7 @@
 #! /usr/bin/env node
 'use strict';
 var ebicsApi = require('ebics-client');
-const path = require('path');
 const fs = require('fs');
-const os = require('os');
 
 const config = require('../utils/loadConfig')();
 const client = require('../utils/getClient')(config);
@@ -18,8 +16,10 @@ exports.BankLetter = async (req, res) => {
     const letter = new ebicsApi.BankLetter({ client, bankName, template });
 
     await letter.serialize(bankLetterFile);
+    const generatedHTML = fs.readFileSync(bankLetterFile, { encoding: 'utf8' });
 
-    res.json({ message: 'Letter was generated' });
+
+    res.status(200).send(generatedHTML);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err.message });
