@@ -1,21 +1,21 @@
 #! /usr/bin/env node
 'use strict';
 const client = require('../utils/getClient')();
-var ebicsApi = require('ebics-client');
 const fs = require('fs');
-var SEPA = require('sepa');
+const SEPA = require('sepa');
 const utils = require('ebics-client/lib/utils');
+const Keys = require('ebics-client/lib/keymanagers/Keys');
 
 exports.DirectTransfer = async (req, res) => {
   const { body } = req;
   const data = body;
 
-  var doc = new SEPA.Document('pain.008.001.02');
+  const doc = new SEPA.Document('pain.008.001.02');
   doc.grpHdr.id = 'XMPL.20140201.TR0';
   doc.grpHdr.created = new Date();
   doc.grpHdr.initiatorName = 'AmagumorLabs service';
 
-  var info = doc.createPaymentInfo();
+  const info = doc.createPaymentInfo();
   info.collectionDate = new Date();
   // info.requestedExecutionDate = new Date('2023-09-26');
   info.creditorIBAN = data[0].to;
@@ -25,7 +25,7 @@ exports.DirectTransfer = async (req, res) => {
   // info.batchBooking = true; //optional
   doc.addPaymentInfo(info);
 
-  var tx = info.createTransaction();
+  const tx = info.createTransaction();
   tx.debtorName = data[1].object.name;
   tx.debtorIBAN = data[1].to;
   // tx.debtorBIC = 'CUSTDEM0XXX';
@@ -46,7 +46,7 @@ exports.DirectTransfer = async (req, res) => {
     const resp = await client.send({
       version: 'h004',
       orderDetails: {
-        OrderType: 'XE2',
+        OrderType: 'XE3',
         OrderAttribute: 'OZHNN',
         StandardOrderParams: {},
       },
@@ -63,25 +63,30 @@ exports.DirectTransfer = async (req, res) => {
 
 exports.RetrieveStatement = async (req, res) => {
   const {start, end} = req.body;
+  console.log(utils.dateRange(start, end));
+  console.log(client);
   try {
-    // const resp = await client.send(ebicsApi.Orders.Z53('2023-09-23', '2023-09-24'))
     const resp = await client.send({
       version: 'h004',
       orderDetails: {
         OrderType: 'Z53',
         OrderAttribute: 'DZHNN',
-        StandardOrderParams: utils.dateRange(start, end),
+        StandardOrderParams:utils.dateRange(start, end),
       },
       operation: 'download',
     })
-    console.log('Response for Z53 order %j', resp);
+    console.log('Response for Z52 order %j', resp);
     const data = Buffer.from(resp.orderData.toString());
-		// console.log(data.toString('utf8'));
+    let distPath = "CAMT053.txt"; 
+		const dstZip = fs.createWriteStream(distPath); 
+		dstZip.write(data); 
+		dstZip.end();
+		console.log(resp.orderData);
     
     if (resp.technicalCode !== '000000')
-      return res.status(500).json({ error: "Something went wrong" });
+      return res.status(500).json({ error: resp });
 
-    return res.status(200).json({...resp, orderData: data.toString('utf8')});
+    return res.status(200).json({resp});
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

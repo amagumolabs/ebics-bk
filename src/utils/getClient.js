@@ -10,6 +10,10 @@ module.exports = ({
 	hostId,
 	passphrase,
 	keyStoragePath,
+	bankName,
+	bankShortName,
+	languageCode,
+	storageLocation
 } = loadConfig()) => new ebicsApi.Client({
 	url,
 	partnerId,
@@ -17,4 +21,8 @@ module.exports = ({
 	hostId,
 	passphrase,
 	keyStorage: ebicsApi.fsKeysStorage(keyStoragePath),
+	bankName,
+	bankShortName,
+	languageCode,
+	storageLocation
 });

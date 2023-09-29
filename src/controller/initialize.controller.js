@@ -1,6 +1,5 @@
 const fs = require('fs');
 const ebicsApi = require('ebics-client');
-const H004Response = require('ebics-client/lib/orders/H004/response');
 const client = require('../utils/getClient')();
 
 
@@ -35,13 +34,14 @@ exports.SaveBankKeys = async (req, res) => {
       return res.status(500).json({ HPBResponse: resp });
     }
 
-    console.log('Received bank keys', client.keyStorage.read());
+
+    // console.log('Received bank keys', client.keyStorage.read());
     fs.writeFileSync(bankKeysFile, resp.orderData, { encoding: 'utf8' });
     
     // Assuming there is a function to set bank keys in your client
     await client.setBankKeys(resp.bankKeys);
     return res.json({
-      client: client,
+      client: resp,
       message: 'Bank public keys should be saved now.',
     });
   } catch (err) {

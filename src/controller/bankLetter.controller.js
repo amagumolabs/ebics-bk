@@ -18,7 +18,6 @@ exports.BankLetter = async (req, res) => {
     await letter.serialize(bankLetterFile);
     const generatedHTML = fs.readFileSync(bankLetterFile, { encoding: 'utf8' });
 
-
     res.status(200).send(generatedHTML);
   } catch (err) {
     console.error(err);
